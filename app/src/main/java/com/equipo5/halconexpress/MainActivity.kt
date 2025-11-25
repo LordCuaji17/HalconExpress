@@ -10,13 +10,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState // Para poder bajar si no cabe en pantalla
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.* // <--- IMPORTANTE: Para recordar estados
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,32 +33,45 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        // --- AQUÍ CONECTAMOS TU BD JAVA ---
-        // 1. Instanciamos tu clase Java
+
+        // --- BASE DE DATOS ---
         val dbHelper = HalconDataBase(this)
+        dbHelper.readableDatabase // Fuerza la creación si no existe
+        Toast.makeText(this, "Sistema Listo", Toast.LENGTH_SHORT).show()
+        // ---------------------
 
-        // 2. Pedimos permiso de escritura. ESTO es lo que detona el "onCreate" de tu SQL
-        // y crea el archivo "halcon_express.db" en el celular si no existe.
-        val db = dbHelper.writableDatabase
-
-        // (Opcional) Un mensajito para saber que jaló
-        Toast.makeText(this, "Base de Datos Lista", Toast.LENGTH_SHORT).show()
-        // ----------------------------------
         setContent {
             HalconExpressTheme {
-                PantallaMenuPrincipal()
+                // --- CONTROL DE NAVEGACIÓN ---
+                // Variable que recuerda en qué pantalla estamos. Inicia en "menu"
+                var pantallaActual by remember { mutableStateOf("menu") }
+
+                when (pantallaActual) {
+                    "menu" -> {
+                        PantallaMenuPrincipal(
+                            // Le pasamos la función para cambiar a modo Admin
+                            onNavegarAdmin = { pantallaActual = "admin" }
+                        )
+                    }
+                    "admin" -> {
+                        // Aquí llamamos a TU pantalla nueva y le decimos cómo volver
+                        PantallaAdminRutas(
+                            onVolver = { pantallaActual = "menu" }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun PantallaMenuPrincipal() {
+// Modificamos la función para que acepte la orden de navegar
+fun PantallaMenuPrincipal(onNavegarAdmin: () -> Unit) {
     val colorPrimario = Color(0xFF0D1B2A)
     val colorSecundario = Color(0xFF4C96D7)
     val colorFondo = Color(0xFFF5F5F5)
 
-    // Agregamos scroll por si en teléfonos chicos no caben los 5 botones
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +86,7 @@ fun PantallaMenuPrincipal() {
                 .padding(top = 40.dp, bottom = 15.dp, start = 16.dp, end = 16.dp)
         ) {
             Text(
-                text = "Halcón Express", // Nombre de la app
+                text = "Halcón Express",
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
@@ -119,69 +132,50 @@ fun PantallaMenuPrincipal() {
 
         // --- 3. MÓDULOS DEL PROYECTO ---
 
-        // FILA 1: Mapa (M1) y Buscador (M4)
+        // FILA 1
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            // Módulo 1: Mapa (Place/Location)
-            BotonMenu(
-                icon = Icons.Default.Place,
-                text = "MAPA Y RUTA",
-                color = colorPrimario
-            )
-            // Módulo 4: Búsqueda (Search)
-            BotonMenu(
-                icon = Icons.Default.Search,
-                text = "BUSCADOR",
-                color = colorPrimario
-            )
+            BotonMenu(Icons.Default.Place, "MAPA Y RUTA", colorPrimario)
+            BotonMenu(Icons.Default.Search, "BUSCADOR", colorPrimario)
         }
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        // FILA 2: Lista Paradas (M3) y Próximo Bus (M5)
+        // FILA 2
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            // Módulo 3: Lista (List)
-            BotonMenu(
-                icon = Icons.Default.List,
-                text = "LISTA PARADAS",
-                color = colorPrimario
-            )
-            // Módulo 5: Tiempo (Notifications/Schedule)
-            BotonMenu(
-                icon = Icons.Default.Notifications, // O DateRange
-                text = "PRÓXIMO BUS",
-                color = Color(0xFFD32F2F) // Rojo para resaltar urgencia/tiempo
-            )
+            BotonMenu(Icons.Default.List, "LISTA PARADAS", colorPrimario)
+            BotonMenu(Icons.Default.Notifications, "PRÓXIMO BUS", Color(0xFFD32F2F))
         }
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        // FILA 3: Gestión Admin (M2) - Botón Ancho
+        // FILA 3: Gestión Admin (CONECTADA)
         Box(modifier = Modifier.padding(horizontal = 20.dp)) {
             BotonAncho(
                 icon = Icons.Default.Settings,
                 text = "ADMINISTRAR RUTAS Y HORARIOS",
-                color = Color(0xFF455A64) // Un gris azulado para diferenciar admin
+                color = Color(0xFF455A64),
+                onClick = onNavegarAdmin // <--- AQUÍ CONECTAMOS EL CLIC
             )
         }
 
-        Spacer(modifier = Modifier.height(30.dp)) // Espacio final
+        Spacer(modifier = Modifier.height(30.dp))
     }
 }
 
-// --- BOTÓN CUADRADO (Para las filas de 2) ---
+// --- BOTÓN CUADRADO ---
 @Composable
 fun RowScope.BotonMenu(icon: ImageVector, text: String, color: Color) {
     Card(
         modifier = Modifier
             .weight(1f)
             .height(120.dp)
-            .clickable { /* AQUÍ PONDREMOS LA NAVEGACIÓN LUEGO */ },
+            .clickable { /* Pendiente otros módulos */ },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(12.dp)
@@ -203,14 +197,15 @@ fun RowScope.BotonMenu(icon: ImageVector, text: String, color: Color) {
     }
 }
 
-// --- BOTÓN ANCHO (Para el Admin) ---
+// --- BOTÓN ANCHO (ADMIN) ---
 @Composable
-fun BotonAncho(icon: ImageVector, text: String, color: Color) {
+// Agregamos el parámetro onClick para recibir el clic
+fun BotonAncho(icon: ImageVector, text: String, color: Color, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth() // Ocupa todo el ancho
+            .fillMaxWidth()
             .height(80.dp)
-            .clickable { /* NAVEGACIÓN ADMIN */ },
+            .clickable { onClick() }, // <--- Ejecutamos la acción al tocar
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(12.dp)
@@ -219,7 +214,6 @@ fun BotonAncho(icon: ImageVector, text: String, color: Color) {
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Icono a la izquierda
             Box(
                 modifier = Modifier
                     .width(80.dp)
@@ -229,7 +223,6 @@ fun BotonAncho(icon: ImageVector, text: String, color: Color) {
             ) {
                 Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(35.dp), tint = Color.White)
             }
-            // Texto a la derecha
             Box(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 15.dp),
                 contentAlignment = Alignment.CenterStart

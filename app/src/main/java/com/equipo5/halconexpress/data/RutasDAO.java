@@ -4,50 +4,74 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import java.util.ArrayList;
+import java.util.List;
 
-// DAO = Data Access Object
-// Este archivo contiene SOLO la lógica para el MÓDULO 2 (Gestión Admin)
 public class RutasDAO {
 
     private final HalconDataBase dbHelper;
 
     public RutasDAO(Context context) {
-        // Inicializamos la conexión común
         dbHelper = new HalconDataBase(context);
     }
 
-    // --- FUNCIONES PARA RUTAS ---
+    // ==========================================
+    //              ZONA DE RUTAS
+    // ==========================================
 
     public long insertarRuta(String nombre, String descripcion) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("nombre", nombre);
         values.put("descripcion", descripcion);
-        // Cerramos la conexión tras escribir para liberar memoria
         long id = db.insert(HalconDataBase.TABLE_RUTAS, null, values);
         db.close();
         return id;
     }
 
-    // --- FUNCIONES PARA HORARIOS ---
+    public List<Ruta> obtenerTodasLasRutas() {
+        List<Ruta> lista = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        Cursor cursor = db.rawQuery("SELECT * FROM " + HalconDataBase.TABLE_RUTAS, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id_Rutas"));
+                String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
+                String desc = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"));
+                lista.add(new Ruta(id, nombre, desc));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lista;
+    }
+
+    // ==========================================
+    //            ZONA DE HORARIOS (¡AQUÍ ESTABA EL DETALLE!)
+    // ==========================================
+
+    // 1. Guardar el Horario
     public long insertarHorario(int idRuta, String horaSalida) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+
+        // OJO: Estas claves deben coincidir EXACTO con HalconDataBase.java
         values.put("id_Ruta", idRuta);
         values.put("hora_Salida", horaSalida);
+
         long id = db.insert(HalconDataBase.TABLE_HORARIOS, null, values);
         db.close();
         return id;
     }
 
-    // Obtener lista de horarios de una ruta (Para tu pantalla de Admin)
-    public ArrayList<String> obtenerHorariosPorRuta(int idRuta) {
-        ArrayList<String> horarios = new ArrayList<>();
+    // 2. Leer los Horarios de una Ruta específica
+    public List<String> obtenerHorariosPorRuta(int idRuta) {
+        List<String> horarios = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        // Consulta: "DAME la hora_Salida DE la tabla horarios DONDE el id_Ruta SEA igual al que te paso"
         Cursor cursor = db.rawQuery(
                 "SELECT hora_Salida FROM " + HalconDataBase.TABLE_HORARIOS + " WHERE id_Ruta = ?",
                 new String[]{String.valueOf(idRuta)}
@@ -55,13 +79,13 @@ public class RutasDAO {
 
         if (cursor.moveToFirst()) {
             do {
-                horarios.add(cursor.getString(0));
+                // Obtenemos el string de la columna 0 (que es hora_Salida)
+                String hora = cursor.getString(0);
+                horarios.add(hora);
             } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
         return horarios;
     }
-
-    // Aquí puedes agregar métodos como 'eliminarRuta', 'editarHorario', etc.
 }
