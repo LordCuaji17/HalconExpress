@@ -28,6 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.equipo5.halconexpress.data.HalconDataBase
 import com.equipo5.halconexpress.ui.theme.HalconExpressTheme
+import androidx.compose.foundation.background
+
+
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,16 +51,21 @@ class MainActivity : ComponentActivity() {
                 // Variable que recuerda en qué pantalla estamos. Inicia en "menu"
                 var pantallaActual by remember { mutableStateOf("menu") }
 
+                // En el setContent del MainActivity, actualiza el when:
                 when (pantallaActual) {
                     "menu" -> {
                         PantallaMenuPrincipal(
-                            // Le pasamos la función para cambiar a modo Admin
-                            onNavegarAdmin = { pantallaActual = "admin" }
+                            onNavegarAdmin = { pantallaActual = "admin" },
+                            onNavegarParadas = { pantallaActual = "paradas" } // <-- Agregar esto
                         )
                     }
                     "admin" -> {
-                        // Aquí llamamos a TU pantalla nueva y le decimos cómo volver
                         PantallaAdminRutas(
+                            onVolver = { pantallaActual = "menu" }
+                        )
+                    }
+                    "paradas" -> {
+                        PantallaListaParadas(
                             onVolver = { pantallaActual = "menu" }
                         )
                     }
@@ -66,8 +76,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-// Modificamos la función para que acepte la orden de navegar
-fun PantallaMenuPrincipal(onNavegarAdmin: () -> Unit) {
+fun PantallaMenuPrincipal(
+    onNavegarAdmin: () -> Unit,
+    onNavegarParadas: () -> Unit  // <-- AGREGAR ESTE PARÁMETRO
+) {
     val colorPrimario = Color(0xFF0D1B2A)
     val colorSecundario = Color(0xFF4C96D7)
     val colorFondo = Color(0xFFF5F5F5)
@@ -143,12 +155,17 @@ fun PantallaMenuPrincipal(onNavegarAdmin: () -> Unit) {
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        // FILA 2
+        // FILA 2 - ACTUALIZAR BOTÓN LISTA PARADAS
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            BotonMenu(Icons.Default.List, "LISTA PARADAS", colorPrimario)
+            BotonMenu(
+                Icons.Default.List,
+                "LISTA PARADAS",
+                colorPrimario,
+                onClick = onNavegarParadas  // <-- CONECTAR AQUÍ
+            )
             BotonMenu(Icons.Default.Notifications, "PRÓXIMO BUS", Color(0xFFD32F2F))
         }
 
@@ -160,7 +177,7 @@ fun PantallaMenuPrincipal(onNavegarAdmin: () -> Unit) {
                 icon = Icons.Default.Settings,
                 text = "ADMINISTRAR RUTAS Y HORARIOS",
                 color = Color(0xFF455A64),
-                onClick = onNavegarAdmin // <--- AQUÍ CONECTAMOS EL CLIC
+                onClick = onNavegarAdmin
             )
         }
 
@@ -168,14 +185,22 @@ fun PantallaMenuPrincipal(onNavegarAdmin: () -> Unit) {
     }
 }
 
-// --- BOTÓN CUADRADO ---
+
+
+
+// --- BOTÓN CUADRADO ACTUALIZADO ---
 @Composable
-fun RowScope.BotonMenu(icon: ImageVector, text: String, color: Color) {
+fun RowScope.BotonMenu(
+    icon: ImageVector,
+    text: String,
+    color: Color,
+    onClick: () -> Unit = {} // <-- Agregar este parámetro con valor por defecto
+) {
     Card(
         modifier = Modifier
             .weight(1f)
             .height(120.dp)
-            .clickable { /* Pendiente otros módulos */ },
+            .clickable { onClick() }, // <-- Usar el parámetro aquí
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(12.dp)
