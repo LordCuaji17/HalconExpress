@@ -31,7 +31,7 @@ import com.equipo5.halconexpress.ui.theme.HalconExpressTheme
 import androidx.compose.foundation.background
 
 
-
+//MODULO 3 TERMINADO - LISTA DE PARADAS CON DETALLE
 
 
 class MainActivity : ComponentActivity() {
