@@ -6,6 +6,8 @@ plugins {
 
 android {
     namespace = "com.equipo5.halconexpress"
+
+    // Usamos la sintaxis del equipo para definir la compileSdk
     compileSdk {
         version = release(36)
     }
@@ -42,6 +44,7 @@ android {
 }
 
 dependencies {
+    // --- DEPENDENCIAS DEL PROYECTO BASE (COMPOSE) ---
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -50,6 +53,19 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // --- DEPENDENCIAS PARA EL MÓDULO DE MAPAS (ACTIVITY TRADICIONAL) ---
+    // Componentes base para las Activities tradicionales (requeridos para MapsActivity)
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // Google Maps SDK (CRÍTICO para tu módulo)
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Dependencia de Localización (opcional, pero útil para obtener la ubicación del usuario)
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    // --- PRUEBAS ---
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
