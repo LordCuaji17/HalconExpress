@@ -69,6 +69,12 @@ class MainActivity : ComponentActivity() {
                             onVolver = { pantallaActual = "menu" }
                         )
                     }
+                    "buscador" -> {
+                        PantallaBuscador(
+                            context = this,
+                            onVolver = { pantallaActual = "menu" }
+                        )
+                    }
                 }
             }
         }
