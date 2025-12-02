@@ -157,9 +157,9 @@ fun PantallaMenuPrincipal(
                         .border(2.dp, Color.White, RoundedCornerShape(10.dp))
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(text = "ID: XXXXXXX", fontSize = 14.sp, color = Color.Gray)
+                Text(text = "", fontSize = 14.sp, color = Color.Gray)
                 Text(
-                    text = "Nombre",
+                    text = "Halcon Express",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorPrimario
