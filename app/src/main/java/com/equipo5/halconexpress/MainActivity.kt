@@ -29,6 +29,11 @@ import androidx.compose.ui.unit.sp
 import com.equipo5.halconexpress.data.HalconDataBase
 import com.equipo5.halconexpress.ui.theme.HalconExpressTheme
 import androidx.compose.foundation.background
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+// Importamos tu ViewModel y la NUEVA función de pantalla
+import com.equipo5.halconexpress.search.SearchViewModel
+import com.equipo5.halconexpress.search.PantallaBuscadorFinal
 
 
 //MODULO 3 TERMINADO - LISTA DE PARADAS CON DETALLE - FGS
@@ -56,7 +61,8 @@ class MainActivity : ComponentActivity() {
                     "menu" -> {
                         PantallaMenuPrincipal(
                             onNavegarAdmin = { pantallaActual = "admin" },
-                            onNavegarParadas = { pantallaActual = "paradas" } // <-- Agregar esto
+                            onNavegarParadas = { pantallaActual = "paradas" },// <-- Agregar esto
+                            onNavegarBuscador = { pantallaActual = "buscador" } //para boton de buscador
                         )
                     }
                     "admin" -> {
@@ -69,6 +75,26 @@ class MainActivity : ComponentActivity() {
                             onVolver = { pantallaActual = "menu" }
                         )
                     }
+                    "buscador" -> {
+                        // 1. Obtenemos el contexto
+                        val context = LocalContext.current
+
+                        // 2. Inicializamos el ViewModel
+                        val searchViewModel: SearchViewModel = viewModel()
+
+                        // 3. Llamamos a la pantalla con el NUEVO nombre
+                        PantallaBuscadorFinal(
+                            context = context,
+                            viewModel = searchViewModel,
+                            onVolver = {
+                                pantallaActual = "menu"
+                            },
+                            onItemClick = { tipo: String, id: Int ->
+                                // Acción al hacer clic en un resultado
+                                println("Click en $tipo con ID: $id")
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -78,7 +104,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PantallaMenuPrincipal(
     onNavegarAdmin: () -> Unit,
-    onNavegarParadas: () -> Unit  // <-- AGREGAR ESTE PARÁMETRO
+    onNavegarParadas: () -> Unit,  // <-- AGREGAR ESTE PARÁMETRO
+    onNavegarBuscador: () -> Unit //para boton buscador
 ) {
     val colorPrimario = Color(0xFF0D1B2A)
     val colorSecundario = Color(0xFF4C96D7)
@@ -150,7 +177,7 @@ fun PantallaMenuPrincipal(
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             BotonMenu(Icons.Default.Place, "MAPA Y RUTA", colorPrimario)
-            BotonMenu(Icons.Default.Search, "BUSCADOR", colorPrimario)
+            BotonMenu(Icons.Default.Search, "BUSCADOR", colorPrimario,onClick = onNavegarBuscador)
         }
 
         Spacer(modifier = Modifier.height(15.dp))
