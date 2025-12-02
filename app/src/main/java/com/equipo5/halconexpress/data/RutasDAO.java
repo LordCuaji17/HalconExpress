@@ -24,6 +24,7 @@ public class RutasDAO {
         ContentValues values = new ContentValues();
         values.put("nombre", nombre);
         values.put("descripcion", descripcion);
+
         long id = db.insert(HalconDataBase.TABLE_RUTAS, null, values);
         db.close();
         return id;
@@ -49,15 +50,14 @@ public class RutasDAO {
     }
 
     // ==========================================
-    //            ZONA DE HORARIOS (¡AQUÍ ESTABA EL DETALLE!)
+    //            ZONA DE HORARIOS
     // ==========================================
 
-    // 1. Guardar el Horario
+    // 1. Guardar el Horario vinculado a una ruta
     public long insertarHorario(int idRuta, String horaSalida) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        // OJO: Estas claves deben coincidir EXACTO con HalconDataBase.java
         values.put("id_Ruta", idRuta);
         values.put("hora_Salida", horaSalida);
 
@@ -71,7 +71,6 @@ public class RutasDAO {
         List<String> horarios = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        // Consulta: "DAME la hora_Salida DE la tabla horarios DONDE el id_Ruta SEA igual al que te paso"
         Cursor cursor = db.rawQuery(
                 "SELECT hora_Salida FROM " + HalconDataBase.TABLE_HORARIOS + " WHERE id_Ruta = ?",
                 new String[]{String.valueOf(idRuta)}
@@ -79,7 +78,6 @@ public class RutasDAO {
 
         if (cursor.moveToFirst()) {
             do {
-                // Obtenemos el string de la columna 0 (que es hora_Salida)
                 String hora = cursor.getString(0);
                 horarios.add(hora);
             } while (cursor.moveToNext());
