@@ -65,6 +65,7 @@ dependencies {
     // Dependencia de Localización (opcional, pero útil para obtener la ubicación del usuario)
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
     // --- PRUEBAS ---
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
