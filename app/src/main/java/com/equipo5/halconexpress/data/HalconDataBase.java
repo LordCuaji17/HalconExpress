@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 // Instrucción para el equipo: "Nadie edite esto a menos que agreguen tablas nuevas".
 public class HalconDataBase extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NOMBRE = "halcon_express.db";
 
     // Nombres de tablas públicos para que los DAOs los usen
@@ -46,9 +46,10 @@ public class HalconDataBase extends SQLiteOpenHelper {
                 ")");
 
         db.execSQL("INSERT INTO " + TABLE_RUTAS + " (nombre, descripcion) VALUES ('Ruta Campus-Centro', 'Ruta directa al centro de la ciudad')");
-
+        //19.257242504331035, -99.5776108305652
         // Insertar una Parada de prueba
         db.execSQL("INSERT INTO " + TABLE_PARADAS + " (nombre, ubicacion, latitud, longitud) VALUES ('Entrada Principal', 'Av. Universidad #100', 19.4326, -99.1332)");
+        db.execSQL("INSERT INTO " + TABLE_PARADAS + " (nombre, ubicacion, latitud, longitud) VALUES ('Instituto Tecnológico de Toluca', 'Av Tecnológico 100-s/n, Agrícola, 52149 San Salvador Tizatlalli, Méx.', 19.257242504331035, -99.5776108305652)");
 
         // Insertar un Horario de prueba (Asumiendo que la ruta creada tiene ID 1)
         db.execSQL("INSERT INTO " + TABLE_HORARIOS + " (id_Ruta, hora_Salida) VALUES (1, '07:00 AM')");

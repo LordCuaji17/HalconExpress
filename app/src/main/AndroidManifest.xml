@@ -26,9 +26,10 @@
         <!-- 3. CLAVE DE API DE GOOGLE MAPS -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDgr0ea4Uf3ji3H7DD7__wD_OjA1g_UJdw" />
+            android:value="AIzaSyB0HQuSquhtkpC4hF01Bgp1e6zrKJnxLKM" />
+            <!--android:value="AIzaSyDgr0ea4Uf3ji3H7DD7__wD_OjA1g_UJdw" /> -->
 
-        <!-- 4. ACTIVITY PRINCIPAL DEL EQUIPO (LAUNCHER) -->
+        <!-- 4. ACTIVITY PRINCIPAL (LAUNCHER) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -40,7 +41,7 @@
             </intent-filter>
         </activity>
 
-        <!-- 5. ACTIVITY DE TU MÓDULO (MAPA) -->
+        <!-- 5. ACTIVITY DE MÓDULO (MAPA) -->
         <activity
             android:name=".MapsActivity"
             android:exported="false"

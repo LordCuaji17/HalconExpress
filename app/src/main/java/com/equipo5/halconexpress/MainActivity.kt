@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.equipo5.halconexpress.data.HalconDataBase
 import com.equipo5.halconexpress.ui.theme.HalconExpressTheme
-import androidx.compose.foundation.background
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 // Importamos tu ViewModel y la NUEVA función de pantalla
@@ -58,12 +57,21 @@ class MainActivity : ComponentActivity() {
 
                 // En el setContent del MainActivity, actualiza el when:
                 when (pantallaActual) {
+
                     "menu" -> {
                         PantallaMenuPrincipal(
                             onNavegarAdmin = { pantallaActual = "admin" },
                             onNavegarParadas = { pantallaActual = "paradas" },// <-- Agregar esto
-                            onNavegarBuscador = { pantallaActual = "buscador" } //para boton de buscador
+                            onNavegarBuscador = { pantallaActual = "buscador" }, //para boton de buscador
+                            onNavegarMapa = {pantallaActual = "mapa"} //para boton mapa
                         )
+                    }
+                    "mapa" -> {
+                        // Al entrar a este estado, se lanza MapsActivity.
+                        // Luego de lanzar la Activity, volvemos inmediatamente al menú,
+                        // para que, al presionar 'Atrás' en MapsActivity, el usuario regrese aquí.
+                        PantallaMapa()
+                        pantallaActual = "menu"
                     }
                     "admin" -> {
                         PantallaAdminRutas(
@@ -105,7 +113,8 @@ class MainActivity : ComponentActivity() {
 fun PantallaMenuPrincipal(
     onNavegarAdmin: () -> Unit,
     onNavegarParadas: () -> Unit,  // <-- AGREGAR ESTE PARÁMETRO
-    onNavegarBuscador: () -> Unit //para boton buscador
+    onNavegarBuscador: () -> Unit, //para boton buscador
+    onNavegarMapa : () -> Unit //boton mapa
 ) {
     val colorPrimario = Color(0xFF0D1B2A)
     val colorSecundario = Color(0xFF4C96D7)
@@ -176,7 +185,8 @@ fun PantallaMenuPrincipal(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            BotonMenu(Icons.Default.Place, "MAPA Y RUTA", colorPrimario)
+            BotonMenu(Icons.Default.Place, "MAPA Y RUTA", colorPrimario, onClick = onNavegarMapa)
+            //BotonMenu(Icons.Default.Place, "MAPA Y RUTA", colorPrimario)
             BotonMenu(Icons.Default.Search, "BUSCADOR", colorPrimario,onClick = onNavegarBuscador)
         }
 
