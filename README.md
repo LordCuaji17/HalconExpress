@@ -24,7 +24,7 @@ Este proyecto utiliza una arquitectura híbrida para facilitar la integración:
 
 | Módulo | Descripción | Responsable |
 | :--- | :--- | :--- |
-| **Módulo 1** | **Mapa y Ruta:** Visualización del mapa y trazo de ruta. | *Nombre Compañero* |
+| **Módulo 1** | **Mapa y Ruta:** Visualización del mapa y trazo de ruta. | **@Checo19704** |
 | **Módulo 2** | **Admin Rutas:** Alta y edición de rutas y horarios. | **@LordCuaji17** |
 | **Módulo 3** | **Lista Paradas:** Listado secuencial de paradas. | *Nombre Compañero* |
 | **Módulo 4** | **Buscador:** Filtrado de rutas y paradas. | *Nombre Compañero* |
