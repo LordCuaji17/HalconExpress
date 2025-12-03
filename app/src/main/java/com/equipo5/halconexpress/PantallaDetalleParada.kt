@@ -31,6 +31,8 @@ fun PantallaDetalleParada(
         rutas = paradasDAO.obtenerRutasPorParada(parada.id)
     }
 
+    val idRutaParaCalculo: Int = 1 // Ejemplo, reemplazar con parada.idRutaPrincipal
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -124,6 +126,11 @@ fun PantallaDetalleParada(
                     )
                 }
             }
+
+            // ==========================================
+            //  LLAMADA AL COMPONENTE EXTERNO (Módulo 5)
+            // ==========================================
+            TarjetaProximoBus(idRutaParaCalculo = idRutaParaCalculo)
 
             // Tarjeta de rutas (SIN ICONO COMPLICADO)
             Card(
