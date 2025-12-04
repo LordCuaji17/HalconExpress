@@ -13,10 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-// ======================================================================
-// TarjetaProximoBus: Encargada de toda la UI y lógica del Módulo 5
-// ======================================================================
-
 @Composable
 fun TarjetaProximoBus(
     // Recibe el ID de la ruta cuyo horario queremos calcular

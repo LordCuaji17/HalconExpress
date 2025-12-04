@@ -11,15 +11,7 @@ import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.lang.Exception // Necesario para el try/catch
 
-// ===============================================
-//           1. Lógica de Cálculo (Módulo 5 Core)
-// ===============================================
 
-/**
- * Calcula el tiempo restante en minutos hasta el próximo horario de salida.
- * @param horarios Lista de strings con formato "HH:mm" (ej. "07:30").
- * @return El tiempo restante en minutos, o null si no hay más autobuses hoy.
- */
 fun calcularTiempoRestante(horarios: List<String>): Long? {
     val ahora = LocalTime.now()
     var proximoHorario: LocalTime? = null
@@ -49,10 +41,6 @@ fun calcularTiempoRestante(horarios: List<String>): Long? {
         null
     }
 }
-
-// ===============================================
-//           2. ViewModel para la UI
-// ===============================================
 
 data class ProximoBusUiState(
     val isLoading: Boolean = false,

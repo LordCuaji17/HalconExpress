@@ -16,8 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.* // <--- IMPORTANTE: Para recordar estados
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.* import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,12 +29,9 @@ import com.equipo5.halconexpress.data.HalconDataBase
 import com.equipo5.halconexpress.ui.theme.HalconExpressTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-// Importamos tu ViewModel y la NUEVA función de pantalla
+// Importamos tu ViewModel y la función de pantalla del Módulo 4
 import com.equipo5.halconexpress.search.SearchViewModel
 import com.equipo5.halconexpress.search.PantallaBuscadorFinal
-
-
-//MODULO 3 TERMINADO - LISTA DE PARADAS CON DETALLE - FGS
 
 
 class MainActivity : ComponentActivity() {
@@ -55,15 +51,14 @@ class MainActivity : ComponentActivity() {
                 // Variable que recuerda en qué pantalla estamos. Inicia en "menu"
                 var pantallaActual by remember { mutableStateOf("menu") }
 
-                // En el setContent del MainActivity, actualiza el when:
                 when (pantallaActual) {
 
                     "menu" -> {
                         PantallaMenuPrincipal(
                             onNavegarAdmin = { pantallaActual = "admin" },
-                            onNavegarParadas = { pantallaActual = "paradas" },// <-- Agregar esto
-                            onNavegarBuscador = { pantallaActual = "buscador" }, //para boton de buscador
-                            onNavegarMapa = {pantallaActual = "mapa"} //para boton mapa
+                            onNavegarParadas = { pantallaActual = "paradas" },
+                            onNavegarBuscador = { pantallaActual = "buscador" },
+                            onNavegarMapa = {pantallaActual = "mapa"}
                         )
                     }
                     "mapa" -> {
@@ -90,7 +85,7 @@ class MainActivity : ComponentActivity() {
                         // 2. Inicializamos el ViewModel
                         val searchViewModel: SearchViewModel = viewModel()
 
-                        // 3. Llamamos a la pantalla con el NUEVO nombre
+                        // 3. Llamamos a la pantalla del buscador
                         PantallaBuscadorFinal(
                             context = context,
                             viewModel = searchViewModel,
@@ -112,12 +107,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PantallaMenuPrincipal(
     onNavegarAdmin: () -> Unit,
-    onNavegarParadas: () -> Unit,  // <-- AGREGAR ESTE PARÁMETRO
-    onNavegarBuscador: () -> Unit, //para boton buscador
-    onNavegarMapa : () -> Unit //boton mapa
+    onNavegarParadas: () -> Unit,
+    onNavegarBuscador: () -> Unit,
+    onNavegarMapa : () -> Unit
 ) {
-    val colorPrimario = Color(0xFF0D1B2A)
-    val colorSecundario = Color(0xFF4C96D7)
+    // Aquí usamos el recurso 'R.color.halcon_blue' en lugar de un color hardcodeado,
+    // pero para mantener la consistencia con tu código anterior, usamos los colores directos:
+    val colorPrimario = Color(0xFF0D1B2A) // Azul Oscuro
+    val colorSecundario = Color(0xFF4C96D7) // Azul Claro
     val colorFondo = Color(0xFFF5F5F5)
 
     Column(
@@ -156,6 +153,7 @@ fun PantallaMenuPrincipal(
                     .padding(top = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Aquí usamos R.drawable.halcon. Asegúrate de que el recurso exista.
                 Image(
                     painter = painterResource(id = R.drawable.halcon),
                     contentDescription = "Foto Perfil",
@@ -180,35 +178,31 @@ fun PantallaMenuPrincipal(
 
         // --- 3. MÓDULOS DEL PROYECTO ---
 
-        // FILA 1
+        // FILA 1: MAPA y BUSCADOR (Módulos 1 y 4)
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             BotonMenu(Icons.Default.Place, "MAPA Y RUTA", colorPrimario, onClick = onNavegarMapa)
-            //BotonMenu(Icons.Default.Place, "MAPA Y RUTA", colorPrimario)
             BotonMenu(Icons.Default.Search, "BUSCADOR", colorPrimario,onClick = onNavegarBuscador)
         }
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        // FILA 2 - ACTUALIZAR BOTÓN LISTA PARADAS
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
-        ) {
-            BotonMenu(
-                Icons.Default.List,
-                "LISTA PARADAS",
-                colorPrimario,
-                onClick = onNavegarParadas  // <-- CONECTAR AQUÍ
+        // FILA 2: LISTA PARADAS (Módulo 3) - Ahora Ancho Completo
+        // Se utiliza BotonAncho para el full width y se elimina el botón de Próximo Bus (M5)
+        Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+            BotonAncho(
+                icon = Icons.Default.List,
+                text = "LISTA DE PARADAS",
+                color = colorPrimario,
+                onClick = onNavegarParadas
             )
-            BotonMenu(Icons.Default.Notifications, "PRÓXIMO BUS", Color(0xFFD32F2F))
         }
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        // FILA 3: Gestión Admin (CONECTADA)
+        // FILA 3: Gestión Admin (Módulo 2)
         Box(modifier = Modifier.padding(horizontal = 20.dp)) {
             BotonAncho(
                 icon = Icons.Default.Settings,
@@ -223,21 +217,19 @@ fun PantallaMenuPrincipal(
 }
 
 
-
-
-// --- BOTÓN CUADRADO ACTUALIZADO ---
+// --- BOTÓN CUADRADO (USADO EN FILA 1) ---
 @Composable
 fun RowScope.BotonMenu(
     icon: ImageVector,
     text: String,
     color: Color,
-    onClick: () -> Unit = {} // <-- Agregar este parámetro con valor por defecto
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .weight(1f)
             .height(120.dp)
-            .clickable { onClick() }, // <-- Usar el parámetro aquí
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(12.dp)
@@ -259,15 +251,14 @@ fun RowScope.BotonMenu(
     }
 }
 
-// --- BOTÓN ANCHO (ADMIN) ---
+// --- BOTÓN ANCHO (USADO EN FILA 2 y FILA 3) ---
 @Composable
-// Agregamos el parámetro onClick para recibir el clic
 fun BotonAncho(icon: ImageVector, text: String, color: Color, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp)
-            .clickable { onClick() }, // <--- Ejecutamos la acción al tocar
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(12.dp)
