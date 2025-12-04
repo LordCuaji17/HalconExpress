@@ -79,6 +79,8 @@ dependencies {
 
     implementation("com.android.volley:volley:1.2.1")
 
+    implementation("androidx.cardview:cardview:1.0.0")
+
     // =========================================================
     // NUEVA DEPENDENCIA CRÍTICA PARA EL MÓDULO 5 (Desugaring)
     // =========================================================
