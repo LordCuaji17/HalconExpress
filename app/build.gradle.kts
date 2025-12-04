@@ -31,13 +31,23 @@ android {
             )
         }
     }
+
+    // =========================================================
+    // MODIFICACIÓN CRÍTICA PARA SOPORTAR JAVA.TIME EN APIs < 26
+    // =========================================================
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // Configuramos la compatibilidad a Java 8 para que el desugaring funcione correctamente
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        // LÍNEA CLAVE: Activa el Desugaring para el uso de java.time
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
-        jvmTarget = "11"
+        // Aseguramos que Kotlin también use el target de Java 8
+        jvmTarget = "1.8"
     }
+    // =========================================================
+
     buildFeatures {
         compose = true
     }
@@ -66,6 +76,13 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+
+    // =========================================================
+    // NUEVA DEPENDENCIA CRÍTICA PARA EL MÓDULO 5 (Desugaring)
+    // =========================================================
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    // =========================================================
+
     // --- PRUEBAS ---
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
