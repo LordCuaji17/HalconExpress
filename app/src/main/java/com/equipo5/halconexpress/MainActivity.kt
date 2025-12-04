@@ -29,7 +29,6 @@ import com.equipo5.halconexpress.data.HalconDataBase
 import com.equipo5.halconexpress.ui.theme.HalconExpressTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-// Importamos tu ViewModel y la función de pantalla del Módulo 4
 import com.equipo5.halconexpress.search.SearchViewModel
 import com.equipo5.halconexpress.search.PantallaBuscadorFinal
 
@@ -52,7 +51,6 @@ class MainActivity : ComponentActivity() {
                 var pantallaActual by remember { mutableStateOf("menu") }
 
                 when (pantallaActual) {
-
                     "menu" -> {
                         PantallaMenuPrincipal(
                             onNavegarAdmin = { pantallaActual = "admin" },
@@ -62,9 +60,6 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     "mapa" -> {
-                        // Al entrar a este estado, se lanza MapsActivity.
-                        // Luego de lanzar la Activity, volvemos inmediatamente al menú,
-                        // para que, al presionar 'Atrás' en MapsActivity, el usuario regrese aquí.
                         PantallaMapa()
                         pantallaActual = "menu"
                     }
@@ -111,8 +106,7 @@ fun PantallaMenuPrincipal(
     onNavegarBuscador: () -> Unit,
     onNavegarMapa : () -> Unit
 ) {
-    // Aquí usamos el recurso 'R.color.halcon_blue' en lugar de un color hardcodeado,
-    // pero para mantener la consistencia con tu código anterior, usamos los colores directos:
+
     val colorPrimario = Color(0xFF0D1B2A) // Azul Oscuro
     val colorSecundario = Color(0xFF4C96D7) // Azul Claro
     val colorFondo = Color(0xFFF5F5F5)
@@ -153,7 +147,7 @@ fun PantallaMenuPrincipal(
                     .padding(top = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Aquí usamos R.drawable.halcon. Asegúrate de que el recurso exista.
+
                 Image(
                     painter = painterResource(id = R.drawable.halcon),
                     contentDescription = "Foto Perfil",
@@ -175,9 +169,7 @@ fun PantallaMenuPrincipal(
         }
 
         Spacer(modifier = Modifier.height(25.dp))
-
         // --- 3. MÓDULOS DEL PROYECTO ---
-
         // FILA 1: MAPA y BUSCADOR (Módulos 1 y 4)
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),

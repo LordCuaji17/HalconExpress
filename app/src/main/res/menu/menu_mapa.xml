@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mapa_normal"
+        android:title="Normal" />
+
+    <item
+        android:id="@+id/mapa_satelite"
+        android:title="Satélite" />
+
+    <item
+        android:id="@+id/mapa_hibrido"
+        android:title="Híbrido" />
+
+    <item
+        android:id="@+id/mapa_terreno"
+        android:title="Terreno" />
+
+    <item
+        android:id="@+id/mapa_trafico"
+        android:title="Tráfico ON/OFF" />
+
+</menu>

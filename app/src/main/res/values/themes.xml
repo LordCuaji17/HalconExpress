@@ -5,7 +5,7 @@
         ESTILO CORREGIDO:
         El estilo principal de la aplicación debe heredar de Theme.AppCompat.Light.NoActionBar.
         Esto es CRÍTICO para asegurar la compatibilidad con las Activities que dependen
-        de la librería AppCompat, como MapsActivity.
+        de la librería AppCompat, como MapaActivity.
     -->
     <style name="Theme.HalconExpress" parent="Theme.AppCompat.Light.NoActionBar" />
 </resources>

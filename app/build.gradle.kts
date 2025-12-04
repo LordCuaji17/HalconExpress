@@ -77,6 +77,8 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
+    implementation("com.android.volley:volley:1.2.1")
+
     // =========================================================
     // NUEVA DEPENDENCIA CRÍTICA PARA EL MÓDULO 5 (Desugaring)
     // =========================================================

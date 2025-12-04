@@ -43,7 +43,7 @@
 
         <!-- 5. ACTIVITY DE MÓDULO (MAPA) -->
         <activity
-            android:name=".MapsActivity"
+            android:name=".MapaActivity"
             android:exported="false"
             android:label="Monitor de Rutas"
             android:theme="@style/Theme.HalconExpress" />
